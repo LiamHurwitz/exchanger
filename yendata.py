@@ -25,7 +25,7 @@ def initialRequest():
     response = requests.get(url)
     data = response.json()
 
-    print(data)
+#    print(data)
 
     # We save the json data so we don't have to call the API too much
     with open('data.json', 'w', encoding='utf-8') as f:
@@ -37,6 +37,6 @@ def currencyParse():
 
     conversion_rate = data["conversion_rates"]["JPY"]
     return conversion_rate
-
+#    print(conversion_rate)
 
 

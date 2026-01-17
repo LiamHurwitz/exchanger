@@ -1,48 +1,65 @@
-from textual.app import App, ComposeResult
-from textual.widgets import Header, Footer, Button, Digits, Static, Placeholder
-from textual.containers import HorizontalGroup, VerticalScroll
-from textual.screen import Screen
+import tkinter as tk
+import tkinter.messagebox as messagebox
 
-import yendata
+from yendata import *
+# Run useful functions from yendata before main loop
+initialRequest()
+conversion_rate = currencyParse()
 
-class Header(Placeholder):
-    DEFAULT_CSS = """
-    Header {
-        height: 3;
-        dock: top;
-    }
-    """
+root = tk.Tk()
+root.title("Convertinator 9000")
+root.geometry("600x400")
 
-class Footer(Placeholder):
-    DEFAULT_CSS = """
-    Footer {
-        height: 3;
-        dock: bottom;
-    }
-    """
+"""
+GUI Layout:
+    Label: USD to Yen
+    Text Box parsing for integer
+    Button: Convert
+    Output box 
 
-class ColumnsContainer(Placeholder):
-    
+    Label: Yen to USD
+    Text box parsing for integer
+    Button: Convert
+    Output box
+"""
 
-class ConvertScreen(Screen):
-    def compose(self) -> ComposeResult:
-        yield Header(id="Header")
-        yield Footer(id='Footer')
+tk.Label(root, text="USD to Yen (Enter USD): ").pack()
+dollar_entry = tk.Entry(root)
+dollar_entry.pack()
 
-class conversionApp(App):
-    
-    BINDINGS = [
-        #("d", "toggle_dark", "Toggle Dark Mode" )
-        #("t", "toggle_direction", "Toggle USD-JPY / JPY_USD")
-        #("c", "clear_screen", "Clear the Screen")
-    ]
+tk.Label(root, text="Yen to USD (Enter Yen): ").pack()
+yen_entry = tk.Entry(root)
+yen_entry.pack()
 
-    def on_mount(self) -> ComposeResult:
-        self.push_screen(ConvertScreen())
+def convertDtoY():
+    dollar_value = float(dollar_entry.get())
+    yen_conv_value = dollar_value * conversion_rate
+
+    tk.messagebox.showinfo("Results", f"That's worth {yen_conv_value} Yen!")
+
+def convertYtoD():
+    yen_value = float(yen_entry.get())
+    dollar_conv_value = yen_value / conversion_rate
+
+    tk.messagebox.showinfo("Results", f"That's worth {dollar_conv_value} Dollars!")
+
+tk.Button(root, text="Convert USD -> Yen",
+          command=convertDtoY).pack(pady=10)
+
+tk.Button(root, text="Convert Yen -> USD",
+          command=convertYtoD).pack(pady=10)
+
+root.mainloop()
 
 
 
-if __name__ == "__main__":
-    app = conversionApp()
-#    initialRequest() # Have the app run the API upon boot
-    app.run()
+
+
+
+
+
+
+
+
+
+
